@@ -17,8 +17,8 @@ namespace BookingAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     seatId = table.Column<string>(type: "nvarchar(3)", nullable: false),
-                    startDateTime = table.Column<string>(type: "nvarchar(14)", nullable: false),
-                    endDateTime = table.Column<string>(type: "nvarchar(14)", nullable: false)
+                    startDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    endDateTime = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {

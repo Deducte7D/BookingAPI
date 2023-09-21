@@ -14,12 +14,12 @@ namespace BookingAPI.Models
         public string seatId { get; set; } = "";
 
         //...
-        [Column(TypeName = "nvarchar(100)")]
-        public string startDateTime { get; set; } = "";
+        [Column(TypeName = "datetime")]
+        public DateTime startDateTime { get; set; }
 
         //...
-        [Column(TypeName = "nvarchar(100)")]
-        public string endDateTime { get; set; } = "";
+        [Column(TypeName = "datetime")]
+        public DateTime endDateTime { get; set; }
 
     }
 }

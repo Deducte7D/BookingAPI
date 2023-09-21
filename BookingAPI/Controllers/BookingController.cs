@@ -86,10 +86,10 @@ namespace BookingAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking(Booking booking)
         {
-          if (_context.Bookings == null)
-          {
-              return Problem("Entity set 'BookingContext.Bookings'  is null.");
-          }
+            if (_context.Bookings == null)
+            {
+                return Problem("Entity set 'BookingContext.Bookings'  is null.");
+            }
             // Generate a new GUID for the booking
             booking.Id = Guid.NewGuid();
             _context.Bookings.Add(booking);

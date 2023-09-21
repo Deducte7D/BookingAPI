@@ -28,17 +28,15 @@ namespace BookingAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("endDateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(14)");
+                    b.Property<DateTime>("endDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("seatId")
                         .IsRequired()
                         .HasColumnType("nvarchar(3)");
 
-                    b.Property<string>("startDateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(14)");
+                    b.Property<DateTime>("startDateTime")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingAPI.Migrations
 {
     [DbContext(typeof(BookingContext))]
-    [Migration("20230914081956_First Migration")]
+    [Migration("20230921075559_First Migration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -31,17 +31,15 @@ namespace BookingAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("endDateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(14)");
+                    b.Property<DateTime>("endDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("seatId")
                         .IsRequired()
                         .HasColumnType("nvarchar(3)");
 
-                    b.Property<string>("startDateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(14)");
+                    b.Property<DateTime>("startDateTime")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
