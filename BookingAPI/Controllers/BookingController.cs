@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookingAPI.Contexts;
 using BookingAPI.Models;
+using BookingAPI.ClassContructRepos;
 
 namespace BookingAPI.Controllers
 {
@@ -81,21 +82,50 @@ namespace BookingAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Booking
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST api/bookings
         [HttpPost]
-        public async Task<ActionResult<Booking>> PostBooking(Booking booking)
+        public async Task<IActionResult> PostBooking(Booking booking)
         {
-            if (_context.Bookings == null)
+            if (!ModelState.IsValid)
             {
-                return Problem("Entity set 'BookingContext.Bookings'  is null.");
+                return BadRequest(ModelState);
             }
+
+            // Check if the time range is logical
+            if (booking.startDateTime >= booking.endDateTime)
+            {
+                return BadRequest("Booking time range is illogical. Please select a valid time range.");
+            }
+
             // Generate a new GUID for the booking
             booking.Id = Guid.NewGuid();
+
+            // Check if the seat is available for the specified time range
+            bool isSeatAvailable = await IsSeatAvailable(booking.seatId, booking.startDateTime, booking.endDateTime);
+
+            if (!isSeatAvailable)
+            {
+                return BadRequest("The selected seat is not available for the specified time range.");
+            }
+
+            // If the seat is available, save the booking to the database
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBooking", new { id = booking.Id }, booking);
+        }
+
+        // Check if the seat is available for the specified time range
+        private async Task<bool> IsSeatAvailable(string seatId, DateTime startDateTime, DateTime endDateTime)
+        {
+            // Check if there are any existing bookings that overlap with the specified time range
+            bool isAvailable = await _context.Bookings
+                .Where(b => b.seatId == seatId &&
+                            b.startDateTime < endDateTime &&
+                            b.endDateTime > startDateTime)
+                .AnyAsync();
+
+            return !isAvailable; // Return true if the seat is available (no overlapping bookings)
         }
 
         // DELETE: api/Booking/5
@@ -117,6 +147,7 @@ namespace BookingAPI.Controllers
 
             return NoContent();
         }
+
 
         private bool BookingExists(Guid id)
         {
